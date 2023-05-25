@@ -1,0 +1,24 @@
+{
+    "name": "Shamsuddeen/sudo-php",
+    "description": "A PHP Wrapper for the Sudo Africa API",
+    "authors": [
+        {
+            "name": "Shamsuddeen Omacy",
+            "email": "shamsuddeen@sudo.africa",
+            "company": "Sudo Africa"
+        }
+    ],
+	"autoload": {
+        "psr-4": {
+			"SudoAfrica\\Sudo\\": "src/SudoAfrica/Sudo/"
+			},
+        "files": [
+            "src/SudoAfrica/Support/helpers.php"
+        ]
+    },
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2.5",
+        "guzzlehttp/guzzle": "~7.0"
+    }
+}
