@@ -4,13 +4,23 @@ PHP Library for Sudo Africa
 
 ## How to Use
 
-Require the package from Packagist - `composer require Shamsuddeen/sudo-php`
+Require the package from Packagist 
+
+``` bash
+composer require Shamsuddeen/sudo-php
+```
 
 ## Function Naming Convention
 
 Functions are named based on the documentation [located here](https://docs.sudo.africa)
 
-`Add Customer` from the documentation becomes `$Sudo->addCustomer()` as in the sample code below:
+`Add Customer` from the documentation becomes 
+
+``` php
+$sudo->addCustomer()
+```
+
+As in the sample code below:
 
 ## Sample code
   
@@ -43,6 +53,6 @@ $client_data = [
   	"emailAddress" => "omacy@mail.ng"
 ];
 
-$sudo->addClient($client_deet);
+$sudo->addCustomer($client_data);
 ?>
- ```
+```
