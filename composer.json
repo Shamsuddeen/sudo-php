@@ -1,5 +1,6 @@
 {
     "name": "shamsuddeen/sudo-php",
+    "version": "1.0.0",
     "description": "A PHP Wrapper for the Sudo Africa API",
     "authors": [
         {
