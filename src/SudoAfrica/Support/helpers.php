@@ -50,4 +50,5 @@ function cleanResponse($response){
 	$result = $response->getBody();
 	return json_decode($result);
 }
- ?>
+
+?>

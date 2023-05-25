@@ -28,7 +28,7 @@ class Sudo {
 	 * @var $sandbox_api_url
 	 *
 	*/
-	protected $sandbox_api_url = 'https://api.sandbox.sudo.africa';
+	protected $sandbox_api_url = 'https://api.sandbox.sudo.cards';
 	
 	
 	/**
@@ -46,10 +46,12 @@ class Sudo {
 		$api_key = trim($api_key);
 		$this->api_key = $api_key;
 
+		if(empty($api_key)){
+			throw new Exception\InvalidCredentials('Invalid API Key');
+		}
 
 		// Generate Authorization String
-		$authorization_string = "Bearer {$this->api_key}";
-
+		$authorization_string = "Bearer $this->api_key";
 
 		//Specify Api Url to use - Sandbox or Live
 		$base_uri = '';
@@ -78,14 +80,67 @@ class Sudo {
 	public function getBanks(){
 		return $this->sendRequest('get', '/accounts/banks');
 	}
-    
-	
+
+    /**
+     * [addCustomer description]
+     * @param array $client_data [description]
+     * Required fields - 'type', 'status', 'name', phoneNumber, emailAddress, individual => ['firstName', 'lastName', 'dob', 'identity' => ['type', 'number']]
+	 * Optional fields - 'identity' =>  'documents' => ['idFrontUrl', 'idBackUrl', 'addressVerificationUrl']
+	 * @return [object] [Added Customer Object]
+    */
+    public function addCustomer( array $client_data){
+		// Mandatory fields
+		$required_values = ['type', 'status', 'emailAddress', 'phoneNumber', 'name', 'individual' => ['firstName', 'lastName', 'dob', 'identity' => ['type', 'number']]];
+
+		if(!array_keys_exist($client_data, $required_values)){
+		 throw new Exception\RequiredValuesMissing("Missing required values :(");
+		}
+
+		$url = '/customers';
+
+		return $this->sendRequest('post', $url, ['form_params' => $client_data]);
+    }
+
+    /**
+     * [getClient Get client Details]
+     * @param  [string] $customer_id
+     * @return [object] [Client Object]
+    */
+	public function getCustomer($customer_id = null){
+		if(!$customer_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Client Id");
+		}
+
+		$url = "/customers/{$customer_id}";
+
+		return $this->sendRequest('get', $url);
+	}
+
 	/**
-	* [addPayment]
-	* @param [string] $method 		[Mandatory - request method <get | post | put | delete> ]
-	* @param [string] $url           [Mandatory - url to send request to]
-	* @param [array] $params         [data to post to request url]
+	* [editCustomer - Edit Existing Customer]
+	* @param [string] $customer_id
+	* @param [array] $client_data
+    * Required fields - 'type', 'status', 'name', phoneNumber, emailAddress, individual => ['firstName', 'lastName', 'dob', 'identity' => ['type', 'number']]
+	* Optional fields - 'identity' =>  'documents' => ['idFrontUrl', 'idBackUrl', 'addressVerificationUrl']
 	*/
+    public function editCustomer( $customer_id, array $client_data){
+		if(!$customer_id){
+		   throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Client Id");
+		}
+
+		$url = "/customers/{$customer_id}";
+
+		// Mandatory fields
+		$required_values = ['type', 'status', 'emailAddress', 'phoneNumber', 'name', 'individual' => ['firstName', 'lastName', 'dob', 'identity' => ['type', 'number']]];
+
+		if(!array_keys_exist($client_data, $required_values)){
+		     throw new Exception\RequiredValuesMissing("Missing required values :(");
+		}
+
+		return $this->sendRequest('put', $url, ['form_params' => $client_data]);
+    }
+
+    
 	public function sendRequest($method, $url, $params=[])
 	{
 		try{
@@ -101,7 +156,7 @@ class Sudo {
 
 			return cleanResponse($result);
 		}
-        catch( Exception $e){
+        catch(\Exception $e){
             throw $e;
         }
 	}
