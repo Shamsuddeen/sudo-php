@@ -99,6 +99,24 @@ class Sudo {
 	}
 
 	/**
+	 * [transfer Transfer Funds]
+	 * Required fields - 'amount', 'beneficiaryAccountNumber', 'beneficiaryBankCode', 'paymentReference'
+	 * Optional fields - 'narration'
+	 * @return [object] [Transfer Object]
+	*/
+	public function transfer(array $params){
+		$required_values = ['amount', 'beneficiaryAccountNumber', 'beneficiaryBankCode', 'paymentReference'];
+
+		if(!array_keys_exist($params, $required_values)){
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
+		}
+
+		$url = "/accounts/transfer";
+
+		return $this->sendRequest('post', $url, ['body' => json_encode($params)]);
+	}
+
+	/**
 	 * [getAccounts Get Settlement Accounts]
 	 * @return [object] [list of respective business Settlement Accounts]
 	*/
