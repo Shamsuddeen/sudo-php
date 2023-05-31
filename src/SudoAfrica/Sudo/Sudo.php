@@ -81,6 +81,66 @@ class Sudo {
 		return $this->sendRequest('get', '/accounts/banks');
 	}
 
+	/**
+	 * [getAccounts Get Settlement Accounts]
+	 * @return [object] [list of respective business Settlement Accounts]
+	*/
+	public function getAccounts(){
+		return $this->sendRequest('get', '/accounts');
+	}
+
+	/**
+	 * [getAccount Get Settlement Account]
+	 * @param  [string] $account_id
+	 * Required fields - 'id'
+	 * @return [object] [Settlement Account Object]
+	*/
+	public function getAccount($account_id){
+		if(!$account_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
+		}
+
+		$url = "/accounts/{$account_id}";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [createAccount Create Settlement Account]
+	 * @param  [array] $params
+	 * Required fields - 'type', 'accountType', 'currency'
+	 * Optional fields - 'customerId' [The id of the customer. Required when 'type' is wallet]
+	*/
+	public function createAccount(array $params){
+		$required_values = ['type', 'accountType', 'currency'];
+		
+		if(!array_keys_exist($params, $required_values)){
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
+		}
+
+		$url = "/accounts";
+
+		return $this->sendRequest('post', $url, ['body' => json_encode($params)]);
+	}
+
+	/**
+	 * [editAccount Edit Settlement Account]
+	 * @param  [string] $account_id
+	 * @param  [array] $params
+	 * Required fields - 'id'
+	 * Optional fields - 'type', 'accountType', 'currency', 'customerId' [The id of the customer. Required when 'type' is wallet]
+	 * @return [object] [Settlement Account Object]
+	*/
+	public function editAccount($account_id, array $params){
+		if(!$account_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
+		}
+
+		$url = "/accounts/{$account_id}";
+
+		return $this->sendRequest('put', $url, ['body' => json_encode($params)]);
+	}
+
     /**
      * [addCustomer description]
      * @param array $client_data [description]
