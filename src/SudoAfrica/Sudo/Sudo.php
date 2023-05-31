@@ -150,7 +150,7 @@ class Sudo {
 		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
-		return $this->sendRequest('put', $url, ['form_params' => $client_data]);
+		return $this->sendRequest('put', $url, ['body' => $client_data]);
     }
 
 	/**
@@ -197,6 +197,24 @@ class Sudo {
 		$url = "/fundingsources/{$funding_source_id}";
 
 		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [editFundingSource - Edit Funding Sources]
+	 * @param  [string] $funding_source_id
+	 * @param  [array] $params
+	 * @return [object] [Funding Source Object]
+	 * Required fields - 'id'
+	 */
+
+	public function editFundingSource($funding_source_id, array $params){
+		if(!$funding_source_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Funding Source Id");
+		}
+
+		$url = "/fundingsources/{$funding_source_id}";
+
+		return $this->sendRequest('put', $url, ['body' => json_encode($params)]);
 	}
     
 	public function sendRequest($method, $url, $params=[])
