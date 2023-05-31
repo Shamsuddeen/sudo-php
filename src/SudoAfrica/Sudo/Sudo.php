@@ -82,6 +82,23 @@ class Sudo {
 	}
 
 	/**
+	 * [nameEnquiry Verify Account Number]
+	 * Required fields - 'bankCode', 'accountNumber'
+	 * @return [object] [Account Object]
+	*/
+	public function	nameEnquiry(array $params){
+		$required_values = ['bankCode', 'accountNumber'];
+
+		if(!array_keys_exist($params, $required_values)){
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
+		}
+
+		$url = "/accounts/transfer/name-enquiry";
+
+		return $this->sendRequest('post', $url, ['body' => json_encode($params)]);
+	}
+
+	/**
 	 * [getAccounts Get Settlement Accounts]
 	 * @return [object] [list of respective business Settlement Accounts]
 	*/
@@ -121,6 +138,38 @@ class Sudo {
 		$url = "/accounts";
 
 		return $this->sendRequest('post', $url, ['body' => json_encode($params)]);
+	}
+
+	/**
+	 * [getAccount Get Account Balance]
+	 * @param  [string] $account_id
+	 * Required fields - 'id'
+	 * @return [object] [Account Balance Object]
+	*/
+	public function getAccountBalance($account_id){
+		if(!$account_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
+		}
+
+		$url = "/accounts/{$account_id}/balance";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [getAccount Get Account Transactions]
+	 * @param  [string] $account_id
+	 * Required fields - 'id'
+	 * @return [object] [Account Transactions Object]
+	*/
+	public function getAccountTransactions($account_id){
+		if(!$account_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
+		}
+
+		$url = "/accounts/{$account_id}/transactions";
+
+		return $this->sendRequest('get', $url);
 	}
 
 	/**
