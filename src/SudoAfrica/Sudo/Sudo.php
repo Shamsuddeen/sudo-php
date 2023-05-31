@@ -216,7 +216,27 @@ class Sudo {
 
 		return $this->sendRequest('put', $url, ['body' => json_encode($params)]);
 	}
+
+	/**
+	 * [createCard - Create Card]
+	 * @param  [array] $params
+	 * @return [object] [Card Object]
+	 * Required fields - 'customerId', 'fundingSourceId', 'debitAccountId', 'type', 'brand', 'currency', 'issuerCountry', 'status'
+	 * Optional fields - 'number', 'amount', 'expirationDate'
+	*/
     
+	public function createCard( array $param){
+		$required_values = ['customerId', 'fundingSourceId', 'debitAccountId', 'type', 'brand', 'currency', 'issuerCountry', 'status', 'spendingControls'];
+
+		if(!array_keys_exist($param, $required_values)){
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
+		}
+
+		$url = "/cards";
+
+		return $this->sendRequest('post', $url, ['body' => json_encode($param)]);
+	}
+
 	public function sendRequest($method, $url, $params=[])
 	{
 		try{
