@@ -147,12 +147,57 @@ class Sudo {
 		$required_values = ['type', 'status', 'emailAddress', 'phoneNumber', 'name', 'individual'];
 
 		if(!array_keys_exist($client_data, $required_values)){
-		     throw new Exception\RequiredValuesMissing("Missing required values :(");
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		return $this->sendRequest('put', $url, ['form_params' => $client_data]);
     }
 
+	/**
+	* [createFundingSource - Create Funding Sources]
+	* @param [array] $params []
+	* @return [object] [Funding Sources Object]
+	* Required fields - 'type', 'status'
+	* Optional fields - 'jitGateway' [Just in-time gateway details. Required if type is gateway.]
+	*/
+	public function createFundingSource(array $params){
+		$required_values = ['type', 'status'];
+
+		if(!array_keys_exist($params, $required_values)){
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
+		}
+
+		$url = "/fundingsources";
+
+		return $this->sendRequest('post', $url, ['body' => json_encode($params)]);
+	}
+
+	/**
+	 * [getFundingSources - Get Funding Sources]
+	 * @return [object] [Funding Sources Object]
+	*/
+	public function getFundingSources(){
+		$url = "/fundingsources";
+
+		return $this->sendRequest('get', $url);
+	}
+
+
+	/**
+	 * [getFundingSource - Get Funding Sources]
+	 * @param  [string] $funding_source_id
+	 * @return [object] [Funding Source Object]
+	 * Required fields - 'id'
+	*/
+	public function getFundingSource($funding_source_id){
+		if(!$funding_source_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Funding Source Id");
+		}
+
+		$url = "/fundingsources/{$funding_source_id}";
+
+		return $this->sendRequest('get', $url);
+	}
     
 	public function sendRequest($method, $url, $params=[])
 	{
