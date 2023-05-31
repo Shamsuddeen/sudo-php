@@ -4,7 +4,7 @@ namespace SudoAfrica\Sudo;
 
 use GuzzleHttp;
 use SudoAfrica\Sudo\Exception;
-use \Exception as phpException;
+use Exception as phpException;
 
 class Sudo {
 	
@@ -90,15 +90,15 @@ class Sudo {
     */
     public function addCustomer( array $client_data){
 		// Mandatory fields
-		$required_values = ['type', 'status', 'emailAddress', 'phoneNumber', 'name', 'individual' => ['firstName', 'lastName', 'dob', 'identity' => ['type', 'number']]];
+		$required_values = ['type', 'status', 'emailAddress', 'phoneNumber', 'name', 'individual', "billingAddress"];
 
 		if(!array_keys_exist($client_data, $required_values)){
-		 throw new Exception\RequiredValuesMissing("Missing required values :(");
+			throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		$url = '/customers';
 
-		return $this->sendRequest('post', $url, ['form_params' => $client_data]);
+		return $this->sendRequest('post', $url, ['body' => json_encode($client_data)]);
     }
 
     /**
@@ -131,7 +131,7 @@ class Sudo {
 		$url = "/customers/{$customer_id}";
 
 		// Mandatory fields
-		$required_values = ['type', 'status', 'emailAddress', 'phoneNumber', 'name', 'individual' => ['firstName', 'lastName', 'dob', 'identity' => ['type', 'number']]];
+		$required_values = ['type', 'status', 'emailAddress', 'phoneNumber', 'name', 'individual'];
 
 		if(!array_keys_exist($client_data, $required_values)){
 		     throw new Exception\RequiredValuesMissing("Missing required values :(");
