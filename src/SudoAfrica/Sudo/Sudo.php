@@ -74,7 +74,7 @@ class Sudo {
 	}
 
 	/**
-	 * [getStates Get States in a country (Nigeria)]
+	 * [getBanks Get Banks in a country (Nigeria)]
 	 * @return [object] [list of banks and their respective bank_ids]
 	*/
 	public function getBanks(){
@@ -99,6 +99,19 @@ class Sudo {
 		$url = '/customers';
 
 		return $this->sendRequest('post', $url, ['body' => json_encode($client_data)]);
+    }
+
+    /**
+     * [getCustomers get Customers]
+     * @param null [list of customers under your account]
+     * Required fields - 'type', 'status', 'name', phoneNumber, emailAddress, individual => ['firstName', 'lastName', 'dob', 'identity' => ['type', 'number']]
+	 * Optional fields - 'identity' =>  'documents' => ['idFrontUrl', 'idBackUrl', 'addressVerificationUrl']
+	 * @return [object] [Added Customer Object]
+    */
+    public function getCustomers(){
+		$url = '/customers';
+
+		return $this->sendRequest('get', $url);
     }
 
     /**
