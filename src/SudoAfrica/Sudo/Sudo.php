@@ -364,6 +364,108 @@ class Sudo {
 		return $this->sendRequest('post', $url, ['body' => json_encode($param)]);
 	}
 
+	/**
+	 * [getCards - Get Cards]
+	 * @return [object] [Cards Object]
+	*/
+	public function getCards(){
+		$url = "/cards";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [getCustomerCards - Get Customer Cards]
+	 * @param  [string] $customer_id
+	 * @return [object] [Customer Cards Object]
+	*/
+	public function getCustomerCards($customer_id){
+		$url = "/cards/customer/{$customer_id}";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [getCard - Get Card]
+	 * @param  [string] $card_id
+	 * @return [object] [Card Object]
+	 * Required fields - 'id'
+	*/
+	public function getCard($card_id){
+		if(!$card_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+		}
+
+		$url = "/cards/{$card_id}";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [editCard - Edit Card]
+	 * @param  [string] $card_id
+	 * @param  [array] $params
+	 * @return [object] [Card Object]
+	 * Required fields - 'id'
+	*/
+	public function editCard($card_id, array $params){
+		if(!$card_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+		}
+
+		$url = "/cards/{$card_id}";
+
+		return $this->sendRequest('put', $url, ['body' => json_encode($params)]);
+	}
+
+	/**
+	 * [getCardTransactions - Get Card Transactions]
+	 * @param  [string] $card_id
+	 * @return [object] [Card Transactions Object]
+	 * Required fields - 'id'
+	*/
+	public function getCardTransactions($card_id){
+		if(!$card_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+		}
+
+		$url = "/cards/{$card_id}/transactions";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [getCardBalance - Get Card Balance]
+	 * @param  [string] $card_id
+	 * @return [object] [Card Balance Object]
+	 * Required fields - 'id'
+	*/
+	public function getCardBalance($card_id){
+		if(!$card_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+		}
+
+		$url = "/cards/{$card_id}/balance";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [generateCardToken - Generate Card Token]
+	 * @param  [string] $card_id
+	 * @return [object] [Card Token Object]
+	 * Required fields - 'id'
+	*/
+	public function generateCardToken($card_id){
+		if(!$card_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+		}
+
+		$url = "/cards/{$card_id}/token";
+
+		return $this->sendRequest('get', $url);
+	}
+
 	public function sendRequest($method, $url, $params=[])
 	{
 		try{
