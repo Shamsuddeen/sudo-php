@@ -466,6 +466,48 @@ class Sudo {
 		return $this->sendRequest('get', $url);
 	}
 
+	/**
+	 * [getCardPin - Get Card Pin]
+	 * @param  [string] $card_id
+	 * Required fields - 'id'
+	 * @return [object] [Card Pin Object]
+	*/
+
+
+	/**
+	 * [fundCard - Fund Card]
+	 * @param [array] $data
+	 * Required fields - 'debitAccountId', 'creditAccountId', 'amount', 'paymentReference'
+	 * @return [object] [Transaction Object]
+	*/
+	public function fundCard(array $data){
+		$required_values = ['debitAccountId', 'creditAccountId', 'amount', 'paymentReference'];
+		if(!in_array($data, $required_values)){
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
+		}
+
+		$url = "/accounts/transfer";
+
+		return $this->sendRequest('post', $url, ['body' => json_encode($data)]);
+	}
+
+	/**
+	 * [debitCard - Withdraw from Card]
+	 * @param [array] $data
+	 * Required fields - 'debitAccountId', 'creditAccountId', 'amount', 'paymentReference'
+	 * @return [object] [Transaction Object]
+	*/
+	public function debitCard(array $data){
+		$required_values = ['debitAccountId', 'creditAccountId', 'amount', 'paymentReference'];
+		if(!in_array($data, $required_values)){
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
+		}
+
+		$url = "/accounts/transfer";
+
+		return $this->sendRequest('post', $url, ['body' => json_encode($data)]);
+	}
+
 	public function sendRequest($method, $url, $params=[])
 	{
 		try{
