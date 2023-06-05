@@ -452,7 +452,14 @@ class Sudo {
 			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
 		}
 
-		$url = "/cards/{$card_id}/balance";
+		$card = $this->getCard($card_id);
+		if($card->statusCode == 200){
+			$card = $card->data;
+		}else{
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+		}
+
+		$url = "/accounts/{$card->account->_id}/balance";
 
 		return $this->sendRequest('get', $url);
 	}
