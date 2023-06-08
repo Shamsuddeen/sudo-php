@@ -529,6 +529,93 @@ class Sudo {
 		return $this->sendRequest('get', $url);
 	}
 
+	/**
+	 * [getTransactions - Get Transactions]
+	 * @return [object] [Transactions Object]
+	 * Optional fields - 'limit', 'page', 'fromDate', 'toDate'
+	 */
+	public function getTransactions(array $params = []){
+		$url = "/cards/transactions";
+
+		return $this->sendRequest('get', $url, ['body' => json_encode($params)]);
+	}
+
+	/**
+	 * [getTransaction - Get Transaction]
+	 * @param  [string] $transaction_id
+	 * @return [object] [Transaction Object]
+	 */
+	public function getTransaction($transaction_id){
+		if(!$transaction_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Transaction Id");
+		}
+
+		$url = "/cards/transactions/{$transaction_id}";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [createDispute - Dispute transactions that the cardholder does not recognize, suspects to be fraudulent, or has other issues with]
+	 * @param [array] $data
+	 * Required fields - $transactionId, $reason, explanation
+	 * Optional fields - $metadata
+	 * @return [object] [Dispute Object]
+	 */
+	public function createDispute(array $data){
+		$required_values = ['transactionId', 'reason', 'explanation'];
+		if(!in_array($data, $required_values)){
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
+		}
+
+		$url = "/cards/disputes";
+
+		return $this->sendRequest('post', $url, ['body' => json_encode($data)]);
+	}
+
+	/**
+	 * [getDisputes - Get Disputes]
+	 * @return [object] [Disputes Object]
+	 */
+	public function getDisputes(){
+		$url = "/cards/disputes";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [getDispute - Get Dispute]
+	 * @param  [string] $dispute_id
+	 * @return [object] [Dispute Object]
+	 */
+	public function getDispute($dispute_id){
+		if(!$dispute_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Dispute Id");
+		}
+
+		$url = "/cards/disputes/{$dispute_id}";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [updateDispute - Update Dispute]
+	 * @param  [string] $dispute_id
+	 * @param  [array] $data
+	 * Required fields - $transactionId, $reason, explanation
+	 * Optional fields - $metadata
+	 * @return [object] [Dispute Object]
+	 */
+	public function updateDispute($dispute_id, array $data){
+		if(!$dispute_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Dispute Id");
+		}
+
+		$url = "/cards/disputes/{$dispute_id}";
+
+		return $this->sendRequest('put', $url, ['body' => json_encode($data)]);
+	}
+
 	public function sendRequest($method, $url, $params=[])
 	{
 		try{
