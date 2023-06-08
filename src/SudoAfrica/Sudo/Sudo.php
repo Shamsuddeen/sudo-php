@@ -191,14 +191,14 @@ class Sudo {
 	}
 
 	/**
-	 * [editAccount Edit Settlement Account]
+	 * [updateAccount Edit Settlement Account]
 	 * @param  [string] $account_id
 	 * @param  [array] $params
 	 * Required fields - 'id'
 	 * Optional fields - 'type', 'accountType', 'currency', 'customerId' [The id of the customer. Required when 'type' is wallet]
 	 * @return [object] [Settlement Account Object]
 	*/
-	public function editAccount($account_id, array $params){
+	public function updateAccount($account_id, array $params){
 		if(!$account_id){
 			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
 		}
@@ -257,13 +257,13 @@ class Sudo {
 	}
 
 	/**
-	* [editCustomer - Edit Existing Customer]
+	* [updateCustomer - Edit Existing Customer]
 	* @param [string] $customer_id
 	* @param [array] $client_data
     * Required fields - 'type', 'status', 'name', phoneNumber, emailAddress, individual => ['firstName', 'lastName', 'dob', 'identity' => ['type', 'number']]
 	* Optional fields - 'identity' =>  'documents' => ['idFrontUrl', 'idBackUrl', 'addressVerificationUrl']
 	*/
-    public function editCustomer( $customer_id, array $client_data){
+    public function updateCustomer( $customer_id, array $client_data){
 		if(!$customer_id){
 		   throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Client Id");
 		}
@@ -327,14 +327,14 @@ class Sudo {
 	}
 
 	/**
-	 * [editFundingSource - Edit Funding Sources]
+	 * [updateFundingSource - Edit Funding Sources]
 	 * @param  [string] $funding_source_id
 	 * @param  [array] $params
 	 * @return [object] [Funding Source Object]
 	 * Required fields - 'id'
 	 */
 
-	public function editFundingSource($funding_source_id, array $params){
+	public function updateFundingSource($funding_source_id, array $params){
 		if(!$funding_source_id){
 			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Funding Source Id");
 		}
@@ -402,13 +402,13 @@ class Sudo {
 	}
 
 	/**
-	 * [editCard - Edit Card]
+	 * [updateCard - Edit Card]
 	 * @param  [string] $card_id
 	 * @param  [array] $params
 	 * @return [object] [Card Object]
 	 * Required fields - 'id'
 	*/
-	public function editCard($card_id, array $params){
+	public function updateCard($card_id, array $params){
 		if(!$card_id){
 			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
 		}
@@ -481,14 +481,6 @@ class Sudo {
 	}
 
 	/**
-	 * [getCardPin - Get Card Pin]
-	 * @param  [string] $card_id
-	 * Required fields - 'id'
-	 * @return [object] [Card Pin Object]
-	*/
-
-
-	/**
 	 * [fundCard - Fund Card]
 	 * @param [array] $data
 	 * Required fields - 'debitAccountId', 'creditAccountId', 'amount', 'paymentReference'
@@ -520,6 +512,21 @@ class Sudo {
 		$url = "/accounts/transfer";
 
 		return $this->sendRequest('post', $url, ['body' => json_encode($data)]);
+	}
+
+	/**
+	 * [transferStatus - Get Status of a transfer]
+	 * @param  [string] $transfer_id
+	 * @return [object] [Transfer Object]
+	 */
+	public function transferStatus($transfer_id){
+		if(!$transfer_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Transfer Id");
+		}
+
+		$url = "/accounts/transfers/{$transfer_id}";
+
+		return $this->sendRequest('get', $url);
 	}
 
 	public function sendRequest($method, $url, $params=[])
