@@ -616,6 +616,64 @@ class Sudo {
 		return $this->sendRequest('put', $url, ['body' => json_encode($data)]);
 	}
 
+	/**
+	 * [getAuthorizations - Get Authorizations]
+	 * @return [object] [Authorizations Object]
+	 */
+	public function getAuthorizations(){
+		$url = "/cards/authorizations";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [getCardAuthorizations - Get Card Authorizations]
+	 * @param  [string] $card_id
+	 * @return [object] [Card Authorizations Object]
+	 */
+	public function getCardAuthorizations($card_id){
+		if(!$card_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+		}
+
+		$url = "/cards/{$card_id}/authorizations";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [getAuthorization - Get Authorization]
+	 * @param  [string] $authorization_id
+	 * @return [object] [Authorization Object]
+	 */
+	public function getAuthorization($authorization_id){
+		if(!$authorization_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Authorization Id");
+		}
+
+		$url = "/cards/authorizations/{$authorization_id}";
+
+		return $this->sendRequest('get', $url);
+	}
+
+	/**
+	 * [updateAuthorization - Update Authorization]
+	 * @param  [string] $authorization_id
+	 * @param  [array] $data
+	 * Required fields - $transactionId
+	 * Optional fields - $metadata
+	 * @return [object] [Authorization Object]
+	 */
+	public function updateAuthorization($authorization_id, array $data){
+		if(!$authorization_id){
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Authorization Id");
+		}
+
+		$url = "/cards/authorizations/{$authorization_id}";
+
+		return $this->sendRequest('put', $url, ['body' => json_encode($data)]);
+	}
+
 	public function sendRequest($method, $url, $params=[])
 	{
 		try{
