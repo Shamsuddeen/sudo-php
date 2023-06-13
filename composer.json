@@ -19,7 +19,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.2.5",
-        "guzzlehttp/guzzle": "^7.7"
+        "guzzlehttp/guzzle": ">=7.5"
     },
     "extra": {
         "branch-alias": {
