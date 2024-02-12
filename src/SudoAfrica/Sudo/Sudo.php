@@ -2,11 +2,8 @@
 
 namespace SudoAfrica\Sudo;
 
+use SudoAfrica\Sudo\Exception;
 use GuzzleHttp;
-use SudoAfrica\Sudo\Exception\InvalidCredentials;
-use SudoAfrica\Sudo\Exception\IsNullOrInvalid;
-use SudoAfrica\Sudo\Exception\RequiredValuesMissing;
-
 class Sudo {
 	
 
@@ -48,7 +45,7 @@ class Sudo {
 		$this->api_key = $api_key;
 
 		if(empty($api_key)){
-			throw new InvalidCredentials('Invalid API Key');
+			throw new Exception\InvalidCredentials('Invalid API Key');
 		}
 
 		// Generate Authorization String
@@ -70,7 +67,8 @@ class Sudo {
 			'headers' => [
 				'Authorization' => $authorization_string,
 				'Content-Type' => 'application/json'
-			]
+			],
+			'http_errors' => false
 		]);
 	}
 
@@ -91,7 +89,7 @@ class Sudo {
 		$required_values = ['bankCode', 'accountNumber'];
 
 		if(!array_keys_exist($params, $required_values)){
-		    throw new RequiredValuesMissing("Missing required values :(");
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		$url = "/accounts/transfer/name-enquiry";
@@ -109,7 +107,7 @@ class Sudo {
 		$required_values = ['amount', 'beneficiaryAccountNumber', 'beneficiaryBankCode', 'paymentReference'];
 
 		if(!array_keys_exist($params, $required_values)){
-		    throw new RequiredValuesMissing("Missing required values :(");
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		$url = "/accounts/transfer";
@@ -133,7 +131,7 @@ class Sudo {
 	*/
 	public function getAccount($account_id){
 		if(!$account_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
 		}
 
 		$url = "/accounts/{$account_id}";
@@ -151,7 +149,7 @@ class Sudo {
 		$required_values = ['type', 'accountType', 'currency'];
 		
 		if(!array_keys_exist($params, $required_values)){
-		    throw new RequiredValuesMissing("Missing required values :(");
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		$url = "/accounts";
@@ -167,7 +165,7 @@ class Sudo {
 	*/
 	public function getAccountBalance($account_id){
 		if(!$account_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
 		}
 
 		$url = "/accounts/{$account_id}/balance";
@@ -183,7 +181,7 @@ class Sudo {
 	*/
 	public function getAccountTransactions($account_id){
 		if(!$account_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
 		}
 
 		$url = "/accounts/{$account_id}/transactions";
@@ -201,7 +199,7 @@ class Sudo {
 	*/
 	public function updateAccount($account_id, array $params){
 		if(!$account_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Account Id");
 		}
 
 		$url = "/accounts/{$account_id}";
@@ -221,7 +219,7 @@ class Sudo {
 		$required_values = ['type', 'status', 'emailAddress', 'phoneNumber', 'name', 'individual', "billingAddress"];
 
 		if(!array_keys_exist($client_data, $required_values)){
-			throw new RequiredValuesMissing("Missing required values :(");
+			throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		$url = '/customers';
@@ -249,7 +247,7 @@ class Sudo {
     */
 	public function getCustomer($customer_id = null){
 		if(!$customer_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Client Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Client Id");
 		}
 
 		$url = "/customers/{$customer_id}";
@@ -266,7 +264,7 @@ class Sudo {
 	*/
     public function updateCustomer( $customer_id, array $client_data){
 		if(!$customer_id){
-		   throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Client Id");
+		   throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Client Id");
 		}
 
 		$url = "/customers/{$customer_id}";
@@ -275,7 +273,7 @@ class Sudo {
 		$required_values = ['type', 'status', 'emailAddress', 'phoneNumber', 'name', 'individual'];
 
 		if(!array_keys_exist($client_data, $required_values)){
-		    throw new RequiredValuesMissing("Missing required values :(");
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		return $this->sendRequest('put', $url, ['body' => $client_data]);
@@ -292,7 +290,7 @@ class Sudo {
 		$required_values = ['type', 'status'];
 
 		if(!array_keys_exist($params, $required_values)){
-		    throw new RequiredValuesMissing("Missing required values :(");
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		$url = "/fundingsources";
@@ -319,7 +317,7 @@ class Sudo {
 	*/
 	public function getFundingSource($funding_source_id){
 		if(!$funding_source_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Funding Source Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Funding Source Id");
 		}
 
 		$url = "/fundingsources/{$funding_source_id}";
@@ -337,7 +335,7 @@ class Sudo {
 
 	public function updateFundingSource($funding_source_id, array $params){
 		if(!$funding_source_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Funding Source Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Funding Source Id");
 		}
 
 		$url = "/fundingsources/{$funding_source_id}";
@@ -357,7 +355,7 @@ class Sudo {
 		$required_values = ['customerId', 'fundingSourceId', 'debitAccountId', 'type', 'brand', 'currency', 'issuerCountry', 'status', 'spendingControls'];
 
 		if(!array_keys_exist($param, $required_values)){
-		    throw new RequiredValuesMissing("Missing required values :(");
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		$url = "/cards";
@@ -394,7 +392,7 @@ class Sudo {
 	*/
 	public function getCard($card_id){
 		if(!$card_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
 		}
 
 		$url = "/cards/{$card_id}";
@@ -411,7 +409,7 @@ class Sudo {
 	*/
 	public function updateCard($card_id, array $params){
 		if(!$card_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
 		}
 
 		$url = "/cards/{$card_id}";
@@ -427,14 +425,14 @@ class Sudo {
 	*/
 	public function getCardTransactions($card_id){
 		if(!$card_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
 		}
 
 		$card = $this->getCard($card_id);
 		if($card->statusCode == 200){
 			$card = $card->data;
 		}else{
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
 		}
 
 		$url = "/accounts/{$card->account->_id}/transactions";
@@ -450,14 +448,14 @@ class Sudo {
 	*/
 	public function getCardBalance($card_id){
 		if(!$card_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
 		}
 
 		$card = $this->getCard($card_id);
 		if($card->statusCode == 200){
 			$card = $card->data;
 		}else{
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
 		}
 
 		$url = "/accounts/{$card->account->_id}/balance";
@@ -473,7 +471,7 @@ class Sudo {
 	*/
 	public function generateCardToken($card_id){
 		if(!$card_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
 		}
 
 		$url = "/cards/{$card_id}/token";
@@ -490,7 +488,7 @@ class Sudo {
 	public function fundCard(array $data){
 		$required_values = ['debitAccountId', 'creditAccountId', 'amount', 'paymentReference'];
 		if(!in_array($data, $required_values)){
-		    throw new RequiredValuesMissing("Missing required values :(");
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		$url = "/accounts/transfer";
@@ -507,7 +505,7 @@ class Sudo {
 	public function debitCard(array $data){
 		$required_values = ['debitAccountId', 'creditAccountId', 'amount', 'paymentReference'];
 		if(!in_array($data, $required_values)){
-		    throw new RequiredValuesMissing("Missing required values :(");
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		$url = "/accounts/transfer";
@@ -522,7 +520,7 @@ class Sudo {
 	 */
 	public function transferStatus($transfer_id){
 		if(!$transfer_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Transfer Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Transfer Id");
 		}
 
 		$url = "/accounts/transfers/{$transfer_id}";
@@ -548,7 +546,7 @@ class Sudo {
 	 */
 	public function getTransaction($transaction_id){
 		if(!$transaction_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Transaction Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Transaction Id");
 		}
 
 		$url = "/cards/transactions/{$transaction_id}";
@@ -566,7 +564,7 @@ class Sudo {
 	public function createDispute(array $data){
 		$required_values = ['transactionId', 'reason', 'explanation'];
 		if(!in_array($data, $required_values)){
-		    throw new RequiredValuesMissing("Missing required values :(");
+		    throw new Exception\RequiredValuesMissing("Missing required values :(");
 		}
 
 		$url = "/cards/disputes";
@@ -591,7 +589,7 @@ class Sudo {
 	 */
 	public function getDispute($dispute_id){
 		if(!$dispute_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Dispute Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Dispute Id");
 		}
 
 		$url = "/cards/disputes/{$dispute_id}";
@@ -609,7 +607,7 @@ class Sudo {
 	 */
 	public function updateDispute($dispute_id, array $data){
 		if(!$dispute_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Dispute Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Dispute Id");
 		}
 
 		$url = "/cards/disputes/{$dispute_id}";
@@ -634,7 +632,7 @@ class Sudo {
 	 */
 	public function getCardAuthorizations($card_id){
 		if(!$card_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Card Id");
 		}
 
 		$url = "/cards/{$card_id}/authorizations";
@@ -649,7 +647,7 @@ class Sudo {
 	 */
 	public function getAuthorization($authorization_id){
 		if(!$authorization_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Authorization Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Authorization Id");
 		}
 
 		$url = "/cards/authorizations/{$authorization_id}";
@@ -667,7 +665,7 @@ class Sudo {
 	 */
 	public function updateAuthorization($authorization_id, array $data){
 		if(!$authorization_id){
-			throw new IsNullOrInvalid("Error Processing Request - Null/Invalid Authorization Id");
+			throw new Exception\IsNullOrInvalid("Error Processing Request - Null/Invalid Authorization Id");
 		}
 
 		$url = "/cards/authorizations/{$authorization_id}";
